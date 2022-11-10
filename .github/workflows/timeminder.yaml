@@ -1,0 +1,22 @@
+name: Timeminder
+
+on:
+  schedule:
+    - cron: '30 * * * *'
+  workflow_dispatch:
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r timeminder/requirements.txt
+      - name: Run Script
+        run: python timeminder/timeminder.py --beeminder-pat "${{ secrets.BEEMINDER_PAT }}" --goal timeminder
